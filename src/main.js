@@ -1,43 +1,34 @@
-import { createTripInfoTemplate } from './view/trip-info.js';
-import { createSiteMenuTemplate } from './view/site-menu.js';
-import { createRouteInformationTemplate } from './view/route-information.js';
-import { createCostTemplate } from './view/trip-cost.js';
-import { createFiltersTemplate } from './view/filter.js';
-import { createSortTemplate } from './view/sort.js';
-import { createTripEventsListTemplate } from './view/trip-events-list.js';
-import { createNewPointTemplate } from './view/new-point.js';
-import { createEditPointTemplate } from './view/edit-point.js';
-import { createPointTemplate } from './view/point.js';
+import { createRouteAndCostTemplate } from './view/trip-info';
+import { createMenuTemplate } from './view/trip-tabs';
+import { createFilterTemplate } from './view/trip-filters';
+import { createSortTemplate } from './view/trip-sort';
+import { createTripEventsListTemplate } from './view/trip-events-list';
+import { createAddNewPointTemplate } from './view/add-new-point';
+import { createEditPointTemplate } from './view/edit-point';
+import { createPointTemplate } from './view/point';
 
 const POINT_COUNT = 3;
 
-const render = (container, template, place) => {
+const render = (container, template, place = 'beforeend') => {
   container.insertAdjacentHTML(place, template);
 };
 
-const siteHeaderElement = document.querySelector('.page-header');
-const siteMainElement = document.querySelector('.page-main');
-const navigationElement = siteHeaderElement.querySelector('.trip-controls__navigation');
-const tripMainElement = siteHeaderElement.querySelector('.trip-main');
-const filtersElement = siteHeaderElement.querySelector('.trip-controls__filters');
-const tripEventsElement = siteMainElement.querySelector('.trip-events');
+const tripMainElement = document.querySelector('.trip-main');
+const tripNavigationElement = document.querySelector('.trip-controls__navigation');
+const tripFilterElement = document.querySelector('.trip-controls__filters');
+const tripEventsElement = document.querySelector('.trip-events');
 
-render(navigationElement, createSiteMenuTemplate(), 'beforeend');
-render(tripMainElement, createTripInfoTemplate(), 'afterbegin');
+render(tripMainElement, createRouteAndCostTemplate(), 'afterbegin');
+render(tripNavigationElement, createMenuTemplate());
+render(tripFilterElement, createFilterTemplate());
+render(tripEventsElement, createSortTemplate(), 'afterbegin');
+render(tripEventsElement, createTripEventsListTemplate());
 
-const tripInfoElement = tripMainElement.querySelector('.trip-info');
+const tripEventsListElement = document.querySelector('.trip-events__list');
 
-render(tripInfoElement, createRouteInformationTemplate(), 'beforeend');
-render(tripInfoElement, createCostTemplate(), 'beforeend');
-render(filtersElement, createFiltersTemplate(), 'beforeend');
-render(tripEventsElement, createSortTemplate(), 'beforeend');
-render(tripEventsElement, createTripEventsListTemplate(), 'beforeend');
-
-const tripEventsListElement = tripEventsElement.querySelector('.trip-events__list');
-
-render(tripEventsListElement, createEditPointTemplate(), 'beforeend');
-render(tripEventsListElement, createNewPointTemplate(), 'beforeend');
+render(tripEventsListElement, createAddNewPointTemplate(), 'afterbegin');
+render(tripEventsListElement, createEditPointTemplate(), 'afterbegin');
 
 for (let i = 0; i < POINT_COUNT; i++) {
-  render(tripEventsListElement, createPointTemplate(), 'beforeend');
+  render(tripEventsListElement, createPointTemplate());
 }
