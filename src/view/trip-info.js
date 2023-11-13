@@ -1,4 +1,5 @@
 import { humanizeDate, compareTwoDates } from '../utils';
+import { createElement } from '../utils';
 
 const getTotalCost = (points) => {
   let totalCost = 0;
@@ -34,7 +35,7 @@ const getTotalDateGap = (points) => {
 
 const createTotalRoutesName = (names) => names.map((name) => `${name}`).join(' &mdash; ');
 
-export const createRouteAndCostTemplate = (points) => `<section class="trip-main__trip-info  trip-info">
+const createRouteAndCostTemplate = (points) => `<section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
     <h1 class="trip-info__title">${createTotalRoutesName(getTotalRoutes(points))}</h1>
     <p class="trip-info__dates">${getTotalDateGap(points)}</p>
@@ -43,3 +44,26 @@ export const createRouteAndCostTemplate = (points) => `<section class="trip-main
     Total: &euro;&nbsp;<span class="trip-info__cost-value">${getTotalCost(points)}</span>
   </p>
   </section>`;
+
+export default class Info {
+  constructor(points) {
+    this._points = points;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createRouteAndCostTemplate(this._points);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

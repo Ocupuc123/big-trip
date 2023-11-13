@@ -1,6 +1,7 @@
-const TYPES = ['taxi', 'bus', 'train', 'ship', 'transport', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
-
 import { humanizeDate } from '../utils';
+import { createElement } from '../utils';
+
+const TYPES = ['taxi', 'bus', 'train', 'ship', 'transport', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
 const createPictures = (pictures) => pictures.map(({ src, description }) => `<img class="event__photo" src="${src}" alt="${description}">`).join('');
 
@@ -19,7 +20,7 @@ const createEventTypeList = (currentType) => TYPES.map((type) => `
   <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
 </div>`).join('');
 
-export const createEditPointTemplate = ({ type, destination, basePrice, offers, dateFrom, dateTo }) => `<li class="trip-events__item">
+const createEditPointTemplate = ({ type, destination, basePrice, offers, dateFrom, dateTo }) => `<li class="trip-events__item">
 <form class="event event--edit" action="#" method="post">
   <header class="event__header">
     <div class="event__type-wrapper">
@@ -91,3 +92,26 @@ export const createEditPointTemplate = ({ type, destination, basePrice, offers, 
   </section>
 </form>
 </li>`;
+
+export default class EditPoint {
+  constructor(points) {
+    this._points = points;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createEditPointTemplate(this._points);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

@@ -1,4 +1,6 @@
-export const createAddNewPointTemplate = ()=> `<li class="trip-events__item">
+import { createElement } from '../utils';
+
+const createAddNewPointTemplate = () => `<li class="trip-events__item">
 <form class="event event--edit" action="#" method="post">
   <header class="event__header">
     <div class="event__type-wrapper">
@@ -165,3 +167,25 @@ export const createAddNewPointTemplate = ()=> `<li class="trip-events__item">
   </section>
 </form>
 </li>`;
+
+export default class AddNewPoint {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createAddNewPointTemplate();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

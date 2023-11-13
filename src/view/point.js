@@ -1,4 +1,5 @@
 import { humanizeDate, getTimeDuration } from '../utils';
+import { createElement } from '../utils';
 
 const createOffers = (offers) => offers.map(({ title, price }) => `<li class="event__offer">
   <span class="event__offer-title">${title}</span>
@@ -7,7 +8,7 @@ const createOffers = (offers) => offers.map(({ title, price }) => `<li class="ev
 </li>`).join('');
 
 
-export const createPointTemplate = ({ type, destination, offers, isFavorite, basePrice, dateFrom, dateTo }) => `<li class="trip-events__item">
+const createPointTemplate = ({ type, destination, offers, isFavorite, basePrice, dateFrom, dateTo }) => `<li class="trip-events__item">
   <div class="event">
     <time class="event__date" datetime="${humanizeDate(dateFrom, 'YYYY-MM-DDTHH:mm')}">${humanizeDate(dateFrom, 'D MMM')}</time>
     <div class="event__type">
@@ -40,3 +41,26 @@ export const createPointTemplate = ({ type, destination, offers, isFavorite, bas
     </button>
   </div>
   </li>`;
+
+export default class Point {
+  constructor(points) {
+    this._points = points;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createPointTemplate(this._points);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
