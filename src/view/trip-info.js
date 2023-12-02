@@ -1,5 +1,5 @@
-import { humanizeDate, compareTwoDates } from '../utils';
-import { createElement } from '../utils';
+import { humanizeDate, compareTwoDates } from '../utils/date.js';
+import AbstractView from '../view/abstract.js';
 
 const getTotalCost = (points) => {
   let totalCost = 0;
@@ -45,25 +45,13 @@ const createRouteAndCostTemplate = (points) => `<section class="trip-main__trip-
   </p>
   </section>`;
 
-export default class Info {
+export default class Info extends AbstractView {
   constructor(points) {
+    super();
     this._points = points;
-    this._element = null;
   }
 
   getTemplate() {
     return createRouteAndCostTemplate(this._points);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

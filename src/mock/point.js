@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 
-import { getRandomInteger } from '../utils';
+import { getRandomInteger } from '../utils/common.js';
 
 const TYPES = ['taxi', 'bus', 'train', 'ship', 'transport', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 const NAMES = ['Chamonix', 'Amsterdam', 'Geneva'];

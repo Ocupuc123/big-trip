@@ -1,5 +1,5 @@
-import { humanizeDate } from '../utils';
-import { createElement } from '../utils';
+import { humanizeDate } from '../utils/date.js';
+import AbstractView from '../view/abstract.js';
 
 const TYPES = ['taxi', 'bus', 'train', 'ship', 'transport', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
@@ -93,25 +93,44 @@ const createEditPointTemplate = ({ type, destination, basePrice, offers, dateFro
 </form>
 </li>`;
 
-export default class EditPoint {
+export default class EditPoint extends AbstractView {
   constructor(points) {
+    super();
     this._points = points;
-    this._element = null;
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._formCloseClickHandler = this._formCloseClickHandler.bind(this);
+    this._formRemoveClickHanlder = this._formRemoveClickHanlder.bind(this);
+  }
+
+  _formRemoveClickHanlder() {
+    this._callback.remove();
+  }
+
+  _formCloseClickHandler() {
+    this._callback.close();
+  }
+
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.formSubmit();
+  }
+
+  setFormRemoveClickHandler(callback) {
+    this._callback.remove = callback;
+    this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._formRemoveClickHanlder);
+  }
+
+  setFormCloseClickHandler(callback) {
+    this._callback.close = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._formCloseClickHandler);
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
   }
 
   getTemplate() {
     return createEditPointTemplate(this._points);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
