@@ -30,3 +30,14 @@ export const getTimeDuration = (initialDate, expirationDate) => {
   }
   return total;
 };
+
+export const sortPriceUp = (pointA, pointB) => pointB.basePrice - pointA.basePrice;
+
+export const sortTimeUp = (pointA, pointB) => {
+  const dateA = compareTwoDates(pointA.dateFrom, pointA.dateTo);
+  const dateB = compareTwoDates(pointB.dateFrom, pointB.dateTo);
+
+  return dateA - dateB;
+};
+
+export const sortDateDown = (pointA, pointB) => pointA.dateFrom - pointB.dateFrom;

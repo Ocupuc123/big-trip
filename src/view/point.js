@@ -1,4 +1,4 @@
-import { humanizeDate, getTimeDuration } from '../utils/date.js';
+import { humanizeDate, getTimeDuration } from '../utils/point.js';
 import AbstractView from '../view/abstract.js';
 
 const createOffers = (offers) => offers.map(({ title, price }) => `<li class="event__offer">
@@ -47,15 +47,25 @@ export default class extends AbstractView {
     super();
     this._points = points;
     this._editClickHandler = this._editClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
   }
 
   _editClickHandler() {
     this._callback.editClick();
   }
 
+  _favoriteClickHandler() {
+    this._callback.favoriteClick();
+  }
+
   setEditClickHandler(callback) {
     this._callback.editClick = callback;
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
+  }
+
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector('.event__favorite-btn').addEventListener('click', this._favoriteClickHandler);
   }
 
   getTemplate() {

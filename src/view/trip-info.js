@@ -1,30 +1,18 @@
-import { humanizeDate, compareTwoDates } from '../utils/date.js';
+import { humanizeDate, compareTwoDates } from '../utils/point.js';
 import AbstractView from '../view/abstract.js';
 
-const getTotalCost = (points) => {
-  let totalCost = 0;
-  for (const point of points) {
-    const { basePrice, offers } = point;
-    totalCost += Number(basePrice);
+const totalCost = (points) => points.reduce((total, point) => {
+  const { basePrice, offers } = point;
+  total += Number(basePrice);
 
-    if (offers.length) {
-      for (const offer of offers) {
-        totalCost += Number(offer.price);
-      }
-    }
+  if (offers.length) {
+    total += offers.reduce((offerCost, offer) => offerCost + Number(offer.price), 0);
   }
 
-  return totalCost;
-};
+  return total;
+}, 0);
 
-const getTotalRoutes = (points) => {
-  const totalRoutes = [];
-  for (const point of points) {
-    totalRoutes.push(point.destination.name);
-  }
-
-  return totalRoutes;
-};
+const totalRoutes = (points) => points.map((point) => point.destination.name);
 
 const getTotalDateGap = (points) => {
   const datesFrom = points.map(({dateFrom}) => dateFrom).sort(compareTwoDates).shift();
@@ -32,18 +20,23 @@ const getTotalDateGap = (points) => {
   return `${humanizeDate(datesFrom, 'D MMM')} - ${humanizeDate(datesTo, 'D MMM')}`;
 };
 
+const createTotalRoutesName = (names) => names.join(' &mdash; ');
 
-const createTotalRoutesName = (names) => names.map((name) => `${name}`).join(' &mdash; ');
+const createRouteAndCostTemplate = (points) => {
+  const totalRoutesNames = createTotalRoutesName(totalRoutes(points));
+  const totalCostValue = totalCost(points);
+  const totalDateGap = getTotalDateGap(points);
 
-const createRouteAndCostTemplate = (points) => `<section class="trip-main__trip-info  trip-info">
-  <div class="trip-info__main">
-    <h1 class="trip-info__title">${createTotalRoutesName(getTotalRoutes(points))}</h1>
-    <p class="trip-info__dates">${getTotalDateGap(points)}</p>
-  </div>
-  <p class="trip-info__cost">
-    Total: &euro;&nbsp;<span class="trip-info__cost-value">${getTotalCost(points)}</span>
-  </p>
+  return `<section class="trip-main__trip-info trip-info">
+    <div class="trip-info__main">
+      <h1 class="trip-info__title">${totalRoutesNames}</h1>
+      <p class="trip-info__dates">${totalDateGap}</p>
+    </div>
+    <p class="trip-info__cost">
+      Total: &euro;&nbsp;<span class="trip-info__cost-value">${totalCostValue}</span>
+    </p>
   </section>`;
+};
 
 export default class Info extends AbstractView {
   constructor(points) {

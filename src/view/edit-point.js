@@ -1,4 +1,4 @@
-import { humanizeDate } from '../utils/date.js';
+import { humanizeDate } from '../utils/point.js';
 import AbstractView from '../view/abstract.js';
 
 const TYPES = ['taxi', 'bus', 'train', 'ship', 'transport', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
@@ -94,9 +94,9 @@ const createEditPointTemplate = ({ type, destination, basePrice, offers, dateFro
 </li>`;
 
 export default class EditPoint extends AbstractView {
-  constructor(points) {
+  constructor(point) {
     super();
-    this._points = points;
+    this._point = point;
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._formCloseClickHandler = this._formCloseClickHandler.bind(this);
     this._formRemoveClickHanlder = this._formRemoveClickHanlder.bind(this);
@@ -112,7 +112,7 @@ export default class EditPoint extends AbstractView {
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit();
+    this._callback.formSubmit(this._point);
   }
 
   setFormRemoveClickHandler(callback) {
@@ -131,6 +131,6 @@ export default class EditPoint extends AbstractView {
   }
 
   getTemplate() {
-    return createEditPointTemplate(this._points);
+    return createEditPointTemplate(this._point);
   }
 }

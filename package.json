@@ -23,6 +23,7 @@
     "chartjs-plugin-datalabels": "latest",
     "dayjs": "latest",
     "flatpickr": "latest",
-    "he": "latest"
+    "he": "latest",
+    "nanoid": "^5.0.4"
   }
 }
