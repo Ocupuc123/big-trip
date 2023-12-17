@@ -6,7 +6,7 @@ import { render, RenderPosition } from './utils/render';
 import { sortDateDown } from './utils/point'; //
 import { generatePoint } from './mock/point';
 
-const POINT_COUNT = 10;
+const POINT_COUNT = 5;
 
 const points = new Array(POINT_COUNT).fill().map(generatePoint).sort(sortDateDown);
 

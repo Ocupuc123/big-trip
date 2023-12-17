@@ -63,7 +63,8 @@ export default class Point {
   }
 
   resetView() {
-    if(this._mode !== Mode.DEFAULT) {
+    if (this._mode !== Mode.DEFAULT) {
+      this._pointEditComponent.reset(this._point);
       this._replaceFormToCard();
       document.removeEventListener('keydown', this._escKeyDownHandler);
     }
@@ -85,6 +86,7 @@ export default class Point {
   _escKeyDownHandler(evt) {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
+      this._pointEditComponent.reset(this._point);
       this._replaceFormToCard();
       document.removeEventListener('keydown', this._escKeyDownHandler);
     }
@@ -95,18 +97,17 @@ export default class Point {
   }
 
   _handleFavoriteClick() {
+
     this._changeData(
-      Object.assign(
-        {},
-        this._point,
-        {
-          isFavorite: !this._point.isFavorite,
-        },
-      ),
+      {
+        ...this._point,
+        isFavorite: !this._point.isFavorite,
+      }
     );
   }
 
   _handleCloseClick() {
+    this._pointEditComponent.reset(this._point);
     this._replaceFormToCard();
   }
 

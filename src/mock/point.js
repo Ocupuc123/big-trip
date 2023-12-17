@@ -1,36 +1,11 @@
 import dayjs from 'dayjs';
 import { nanoid } from 'nanoid';
 import { getRandomInteger } from '../utils/common.js';
-
-const TYPES = ['taxi', 'bus', 'train', 'ship', 'transport', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
-const NAMES = ['Chamonix', 'Amsterdam', 'Geneva'];
-const DESCRIPTIONS = ['Chamonix, is a beautiful city, a true asian pearl, with crowded streets.', 'Amsterdam, is a beautiful city, a true asian pearl, with crowded streets.', 'Geneva, is a beautiful city, a true asian pearl, with crowded streets.'];
+import { generateOffers } from '../mock/offer.js';
+import { generateDestination } from '../mock/destination.js';
+import { TYPES } from '../const.js';
 
 const generateTypes = () => TYPES[getRandomInteger(0, TYPES.length - 1)];
-
-const generatePictures = () => ({
-  src: `img/photos/${getRandomInteger(1, 5)}.jpg`,
-  description: DESCRIPTIONS[getRandomInteger(0, DESCRIPTIONS.length - 1)]
-});
-
-const generateDestination = () => ({
-  description: DESCRIPTIONS[getRandomInteger(0, DESCRIPTIONS.length - 1)],
-  name: NAMES[getRandomInteger(0, NAMES.length - 1)],
-  pictures: new Array(getRandomInteger(0, 3)).fill().map(generatePictures)
-});
-
-const generateOffer = (index) => {
-  const titles = ['Upgrade to a business class', 'Choose the radio station', 'Choose meal', 'Upgrade to comfort class'];
-  const prices = ['120', '60', '80', '30'];
-
-  return {
-    type: TYPES[index],
-    offers: new Array(getRandomInteger(0, 2)).fill().map(() => ({
-      title: titles[getRandomInteger(0, titles.length - 1)],
-      price: prices[getRandomInteger(0, prices.length - 1)]
-    }))
-  };
-};
 
 const getRandomPrice = () => {
   const prices = ['120', '60', '80', '100'];
@@ -54,15 +29,10 @@ const generateDate = () => {
 
 const date = generateDate();
 
-const additionalOffers = TYPES.reduce((acc, type, index) => {
-  acc[type] = generateOffer(index).offers;
-  return acc;
-}, {});
-
 export const generatePoint = () => {
   const type = generateTypes();
   const dateInterval = date();
-  const offersByType = additionalOffers[type];
+  const offersByType = generateOffers[type];
 
   return {
     id: nanoid(),
